@@ -38,17 +38,17 @@ export default function App() {
     const [isIdentified, setIsIdentified] = useState(!!initialId);
 
     const [activeTab, setActiveTab] = useState('catalog');
-    
+
     // Toast Notification State
     const [toast, setToast] = useState(null);
     const toastTimer = useRef(null);
-    
+
     // API Optimization: Cache items to prevent reload delays
     const [items, setItems] = useState(() => {
         const cachedItems = localStorage.getItem('bhoodhan_catalog_items');
         return cachedItems ? JSON.parse(cachedItems) : [];
     });
-    
+
     // Cart persistence
     const [cart, setCart] = useState(() => {
         const savedCart = localStorage.getItem('bhoodhan_dealer_cart');
@@ -159,12 +159,12 @@ export default function App() {
     const filteredItems = useMemo(() => {
         // Sirf valid rate wale items hi dikhayein (0 price wale hide)
         const availableItems = items.filter(item => item.rate && Number(item.rate) > 0);
-        
+
         if (!searchQuery.trim()) return availableItems;
-        
+
         const query = searchQuery.toLowerCase();
-        return availableItems.filter(item => 
-            item.name.toLowerCase().includes(query) || 
+        return availableItems.filter(item =>
+            item.name.toLowerCase().includes(query) ||
             (item.sku && item.sku.toLowerCase().includes(query))
         );
     }, [items, searchQuery]);
@@ -332,21 +332,21 @@ export default function App() {
             <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 font-sans">
                 <div className="bg-white p-8 rounded-2xl shadow-xl max-w-md w-full border border-gray-100">
                     <div className="flex justify-center mb-6">
-                        <img 
-                            src="/assets/images/bhoodhan_logo-removebg-preview.png" 
-                            alt="Bhoodhan Agriventures" 
+                        <img
+                            src="/assets/images/sworn-agritech-logo.png"
+                            alt="Sworn Agritech Private Limited"
                             className="h-16 w-auto object-contain"
                             onError={(e) => { e.target.style.display = 'none'; }}
                         />
                     </div>
                     <h2 className="text-2xl font-bold text-center text-gray-900 mb-1">Dealer Order Portal</h2>
-                    <p className="text-center text-orange-600 text-sm font-semibold mb-6">Bhoodhan Agriventures Pvt. Ltd.</p>
+                    <p className="text-center text-orange-600 text-sm font-semibold mb-6">SWORN AGRITECH PRIVATE LIMITED</p>
                     <p className="text-center text-gray-500 text-sm mb-6">Please enter your Zoho Customer ID to continue.</p>
                     <form onSubmit={handleIdentify} className="space-y-4">
-                        <input 
-                            type="text" 
-                            required 
-                            placeholder="Enter Customer ID" 
+                        <input
+                            type="text"
+                            required
+                            placeholder="Enter Customer ID"
                             className="w-full p-3 bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none placeholder-gray-400"
                             value={inputCustomerId}
                             onChange={(e) => setInputCustomerId(e.target.value)}
@@ -366,28 +366,28 @@ export default function App() {
             {/* Left Sidebar */}
             <aside className="w-64 bg-white flex flex-col hidden md:flex border-r border-gray-200 shadow-sm z-10">
                 <div className="p-6 flex items-center gap-3 border-b border-gray-100">
-                    <img 
-                        src="/assets/images/bhoodhan_logo-removebg-preview.png" 
-                        alt="Bhoodhan Logo" 
-                        className="h-10 w-10 object-contain p-0.5"
+                    <img
+                        src="/assets/images/sworn-agritech-logo.png"
+                        alt="Sworn Agritech logo"
+                        className="h-12 w-16 object-contain"
                         onError={(e) => { e.target.style.display = 'none'; }}
                     />
                     <div className="overflow-hidden">
-                        <h1 className="font-bold text-gray-900 text-sm truncate">Bhoodhan Agriventures</h1>
+                        <h1 className="font-bold text-gray-900 text-sm truncate">SWORN AGRITECH</h1>
                         <p className="text-xs text-green-700 font-semibold truncate">Dealer Portal</p>
                     </div>
                 </div>
 
                 <nav className="p-4 space-y-2 mt-2 flex-1">
-                    <button 
-                        onClick={() => setActiveTab('catalog')} 
+                    <button
+                        onClick={() => setActiveTab('catalog')}
                         className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-sm transition-all ${activeTab === 'catalog' ? 'bg-orange-50 text-orange-700 border-l-4 border-orange-500' : 'hover:bg-gray-50 text-gray-600 hover:text-gray-900'}`}
                     >
                         <Package className="w-5 h-5" /> Products Catalog
                     </button>
-                    
-                    <button 
-                        onClick={() => setActiveTab('cart')} 
+
+                    <button
+                        onClick={() => setActiveTab('cart')}
                         className={`w-full flex items-center justify-between px-4 py-3 rounded-xl font-semibold text-sm transition-all ${activeTab === 'cart' ? 'bg-orange-50 text-orange-700 border-l-4 border-orange-500' : 'hover:bg-gray-50 text-gray-600 hover:text-gray-900'}`}
                     >
                         <div className="flex items-center gap-3">
@@ -400,8 +400,8 @@ export default function App() {
                         )}
                     </button>
 
-                    <button 
-                        onClick={() => setActiveTab('confirmations')} 
+                    <button
+                        onClick={() => setActiveTab('confirmations')}
                         className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-sm transition-all ${activeTab === 'confirmations' ? 'bg-orange-50 text-orange-700 border-l-4 border-orange-500' : 'hover:bg-gray-50 text-gray-600 hover:text-gray-900'}`}
                     >
                         <ClipboardCheck className="w-5 h-5" /> Balance Confirmations
@@ -412,12 +412,12 @@ export default function App() {
             {/* Mobile Top Header */}
             <div className="md:hidden w-full bg-white text-gray-900 fixed top-0 z-20 border-b border-gray-200 shadow-sm">
                 <div className="flex items-center gap-2 px-4 pt-3">
-                    <img 
-                        src="/assets/images/bhoodhan_logo-removebg-preview.png" 
-                        alt="Logo" 
-                        className="h-8 w-8 object-contain"
+                    <img
+                        src="/assets/images/sworn-agritech-logo.png"
+                        alt="Sworn Agritech logo"
+                        className="h-8 w-12 object-contain"
                     />
-                    <span className="font-bold text-sm">Bhoodhan Dealer Portal</span>
+                    <span className="font-bold text-sm">SWORN AGRITECH</span>
                 </div>
                 <div className="grid grid-cols-3 gap-2 px-3 pb-3 pt-2">
                     <button onClick={() => setActiveTab('catalog')} className={`inline-flex min-h-10 items-center justify-center gap-1.5 rounded-lg px-2 py-2 text-xs font-semibold ${activeTab === 'catalog' ? 'bg-orange-100 text-orange-700' : 'bg-gray-100 text-gray-600'}`}><Package className="h-4 w-4" />Products</button>
@@ -428,7 +428,7 @@ export default function App() {
 
             {/* Main Content Area */}
             <main className="portal-content flex-1 p-4 pt-28 sm:p-6 sm:pt-28 md:p-10 md:pt-10 md:ml-0 md:mt-0 overflow-y-auto bg-gray-50 relative">
-                
+
                 {/* --- TOAST NOTIFICATION UI --- */}
 {toast && (
     <div role="status" className={`fixed top-20 right-6 z-50 flex max-w-sm items-center gap-3 rounded-xl border px-4 py-3 shadow-xl md:top-8 md:right-8 ${toast.type === 'error' ? 'border-red-200 bg-red-50 text-red-800' : toast.type === 'success' ? 'border-emerald-200 bg-emerald-50 text-emerald-800' : 'border-blue-200 bg-white text-slate-700'}`}>
@@ -439,7 +439,7 @@ export default function App() {
 )}
 
                 <div className="max-w-5xl mx-auto">
-                    
+
                     {/* 1. PRODUCT CATALOG */}
                     {activeTab === 'catalog' && (
                         <div>
@@ -450,7 +450,7 @@ export default function App() {
                                 </div>
                                 <div className="relative w-full md:w-80 shadow-sm rounded-xl">
                                     <Search className="absolute left-3.5 top-3.5 w-4 h-4 text-gray-400" />
-                                    <input 
+                                    <input
                                         type="text"
                                         placeholder="Search by Name or SKU..."
                                         value={searchQuery}
@@ -470,7 +470,7 @@ export default function App() {
                                     {filteredItems.map(item => {
                                         // Check karein ki ye item cart mein pehle se hai ya nahi
                                         const cartItem = cart.find(c => c.item_id === item.item_id);
-                                        
+
                                         return (
                                             <div key={item.item_id} className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md hover:border-gray-200 transition-all flex flex-col justify-between group">
                                                 <div>
@@ -479,18 +479,18 @@ export default function App() {
                                                 </div>
                                                 <div className="flex justify-between items-center pt-4 border-t border-gray-100">
                                                     <span className="font-black text-xl text-green-700">₹{item.rate}</span>
-                                                    
+
                                                     {/* DYNAMIC CART CONTROLS */}
                                                     {cartItem ? (
                                                         <div className="flex items-center gap-2 bg-gray-50 px-2.5 py-1.5 rounded-xl border border-gray-200">
-                                                            <button 
+                                                            <button
                                                                 onClick={() => updateQuantity(item.item_id, -1)}
                                                                 className="text-gray-500 hover:text-orange-600 transition p-1"
                                                             >
                                                                 <Minus className="w-4 h-4" />
                                                             </button>
                                                             <span className="font-bold text-sm text-gray-900 w-5 text-center">{cartItem.quantity}</span>
-                                                            <button 
+                                                            <button
                                                                 onClick={() => updateQuantity(item.item_id, 1)}
                                                                 className="text-gray-500 hover:text-orange-600 transition p-1"
                                                             >
@@ -498,7 +498,7 @@ export default function App() {
                                                             </button>
                                                         </div>
                                                     ) : (
-                                                        <button 
+                                                        <button
                                                             onClick={() => addToCart(item)}
                                                             className="bg-orange-500 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-orange-600 transition-colors flex items-center gap-1.5 shadow-sm shadow-orange-500/20"
                                                         >
@@ -531,16 +531,16 @@ export default function App() {
                                                 <h4 className="font-bold text-gray-900 text-sm">{item.name}</h4>
                                                 <p className="text-xs text-green-700 mt-0.5 font-semibold">₹{item.rate} per unit</p>
                                             </div>
-                                            
+
                                             <div className="flex items-center gap-2 bg-gray-50 px-2.5 py-1.5 rounded-xl border border-gray-200">
-                                                <button 
+                                                <button
                                                     onClick={() => updateQuantity(item.item_id, -1)}
                                                     className="text-gray-500 hover:text-orange-600 transition p-1"
                                                 >
                                                     <Minus className="w-3.5 h-3.5" />
                                                 </button>
                                                 <span className="font-bold text-sm text-gray-900 w-6 text-center">{item.quantity}</span>
-                                                <button 
+                                                <button
                                                     onClick={() => updateQuantity(item.item_id, 1)}
                                                     className="text-gray-500 hover:text-orange-600 transition p-1"
                                                 >
@@ -550,7 +550,7 @@ export default function App() {
 
                                             <span className="font-black text-base text-gray-900 text-right sm:w-24">₹{(item.rate * item.quantity).toFixed(2)}</span>
 
-                                            <button 
+                                            <button
                                                 onClick={() => removeFromCart(item.item_id)}
                                                 className="text-red-400 hover:text-red-600 p-2 transition bg-red-50 hover:bg-red-100 rounded-lg"
                                                 title="Remove item"
@@ -565,8 +565,8 @@ export default function App() {
                                         <span className="text-3xl font-black text-green-700">₹{cart.reduce((a,c) => a + (c.rate * c.quantity), 0).toFixed(2)}</span>
                                     </div>
 
-                                    <button 
-                                        onClick={handlePlaceOrder} 
+                                    <button
+                                        onClick={handlePlaceOrder}
                                         disabled={loading}
                                         className="w-full mt-6 bg-green-700 text-white font-bold py-4 rounded-xl hover:bg-green-800 transition shadow-lg shadow-green-700/30"
                                     >

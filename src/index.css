@@ -6,6 +6,10 @@
   color: #1e293b;
   background: #f8fafc;
   font-synthesis: none;
+  --brand-teal: #294f5a;
+  --brand-orange: #fb8f42;
+  --brand-orange-dark: #e8782a;
+  --brand-orange-soft: #fff1e6;
 }
 
 body {
@@ -92,3 +96,23 @@ aside nav > button svg {
     font-size: 0.75rem;
   }
 }
+
+/* Sworn Agritech / Aaradhya Seeds brand colours. */
+.bg-orange-500 { background-color: var(--brand-orange) !important; }
+.hover\:bg-orange-600:hover { background-color: var(--brand-orange-dark) !important; }
+.bg-orange-50 { background-color: var(--brand-orange-soft) !important; }
+.bg-orange-100 { background-color: #ffe5d2 !important; }
+.text-orange-500,
+.text-orange-600,
+.text-orange-700 { color: var(--brand-orange-dark) !important; }
+.text-gray-900,
+.text-green-700 { color: var(--brand-teal) !important; }
+.bg-green-700 { background-color: var(--brand-teal) !important; }
+.hover\:bg-green-800:hover { background-color: #1e4049 !important; }
+.border-orange-500 { border-color: var(--brand-orange) !important; }
+.border-orange-200 { border-color: #f9c69f !important; }
+.focus\:border-orange-500:focus { border-color: var(--brand-orange) !important; }
+.focus\:ring-orange-500:focus { --tw-ring-color: var(--brand-orange) !important; }
+.border-l-orange-500 { border-left-color: var(--brand-orange) !important; }
+.shadow-orange-500\/20,
+.shadow-orange-500\/30 { --tw-shadow-color: rgb(251 143 66 / 0.25) !important; }
