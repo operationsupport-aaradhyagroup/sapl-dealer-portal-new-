@@ -45,13 +45,13 @@ export default function App() {
 
     // API Optimization: Cache items to prevent reload delays
     const [items, setItems] = useState(() => {
-        const cachedItems = localStorage.getItem('bhoodhan_catalog_items');
+        const cachedItems = localStorage.getItem('sworn_agritech_catalog_items');
         return cachedItems ? JSON.parse(cachedItems) : [];
     });
 
     // Cart persistence
     const [cart, setCart] = useState(() => {
-        const savedCart = localStorage.getItem('bhoodhan_dealer_cart');
+        const savedCart = localStorage.getItem('sworn_agritech_dealer_cart');
         return savedCart ? JSON.parse(savedCart) : [];
     });
 
@@ -85,7 +85,7 @@ export default function App() {
     }
 
     useEffect(() => {
-        localStorage.setItem('bhoodhan_dealer_cart', JSON.stringify(cart));
+        localStorage.setItem('sworn_agritech_dealer_cart', JSON.stringify(cart));
     }, [cart]);
 
     useEffect(() => {
@@ -104,7 +104,7 @@ export default function App() {
         try {
             const res = await API.get('/api/items');
             setItems(res.data.items || []);
-            localStorage.setItem('bhoodhan_catalog_items', JSON.stringify(res.data.items || []));
+            localStorage.setItem('sworn_agritech_catalog_items', JSON.stringify(res.data.items || []));
         } catch (err) {
             console.error("Error fetching items:", err);
         }
@@ -178,7 +178,7 @@ export default function App() {
             });
             alert(`Order Placed Successfully! ID: ${response.data.salesorder?.salesorder_number || 'Confirmed'}`);
             setCart([]);
-            localStorage.removeItem('bhoodhan_dealer_cart');
+            localStorage.removeItem('sworn_agritech_dealer_cart');
             setActiveTab('catalog');
         } catch (error) {
             const errMessage = error.response?.data?.error || 'Failed to place order. Make sure ledger is confirmed.';

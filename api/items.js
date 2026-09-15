@@ -9,17 +9,14 @@ export default async function handler(req, res) {
         const token = await getAccessToken();
         const api = await zohoApi(token);
         
-        // Aapki di gayi Default Price List ID
-        const pricebookId = '2858789000000607355';
-
-        // 1. Ek sath Items aur Pricebook fetch karna
-        const [itemsRes, pricebookRes] = await Promise.all([
-            api.get('/items'),
-            api.get(`/pricebooks/${pricebookId}`)
-        ]);
+        // A firm may optionally configure its own Zoho price list. Without one,
+        // use the standard item rate from that firm's Zoho Books organisation.
+        const pricebookId = process.env.ZOHO_PRICEBOOK_ID;
+        const itemsRes = await api.get('/items');
+        const pricebookRes = pricebookId ? await api.get(`/pricebooks/${pricebookId}`) : null;
 
         const allItems = itemsRes.data.items || [];
-        const pricebookItems = pricebookRes.data.pricebook?.pricebook_items || [];
+        const pricebookItems = pricebookRes?.data.pricebook?.pricebook_items || [];
 
         // 2. Pricebook rates ka map banana
         const customRates = {};
