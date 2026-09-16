@@ -155,7 +155,7 @@ async function getRecordForDealer(api, recordId, contactId) {
         error.status = 404;
         throw error;
     }
-    if (String(record.cf_customers) !== String(contactId)) {
+    if (String(record.cf_customer) !== String(contactId)) {
         const error = new Error('Balance Confirmation does not belong to this customer');
         error.status = 403;
         throw error;
@@ -213,7 +213,7 @@ export default async function handler(req, res) {
         if (req.method === 'GET' && segments.length === 0) {
             const response = await api.get(`/${MODULE}`, { params: { per_page: 200 } });
             const summaries = (response.data.module_records || [])
-                .filter((record) => String(record.cf_customers) === String(contactId))
+                .filter((record) => String(record.cf_customer) === String(contactId))
                 .sort((first, second) => new Date(second.last_modified_time || 0) - new Date(first.last_modified_time || 0))
                 .slice(0, 1);
             // List responses do not include custom-table rows, so retrieve each matching
@@ -244,7 +244,7 @@ export default async function handler(req, res) {
             };
             const existingSummaries = (await api.get(`/${MODULE}`, { params: { per_page: 200 } }))
                 .data.module_records
-                ?.filter((record) => String(record.cf_customers) === String(contactId))
+                ?.filter((record) => String(record.cf_customer) === String(contactId))
                 .sort((first, second) => new Date(second.last_modified_time || 0) - new Date(first.last_modified_time || 0)) || [];
 
             if (existingSummaries.length > 0) {
@@ -254,10 +254,11 @@ export default async function handler(req, res) {
                 return json(res, 200, { record: toPortalRecord(updated), appended: true });
             }
 
-            const customerNumber = Number(customerIdentifier);
+            const customerDigits = String(customerIdentifier).replace(/\\D/g, '');
+            const numericCustomerNumber = customerDigits ? Number(customerDigits) : null;
             const payload = {
-                cf_custom_number: Number.isFinite(customerNumber) ? customerNumber : customerIdentifier,
-                cf_customers: contactId,
+                ...(Number.isFinite(numericCustomerNumber) && { cf_custom_number: numericCustomerNumber }),
+                cf_customer: contactId,
                 [LEDGER_FIELD]: [ledgerRow],
             };
             const createdResponse = await api.post(`/${MODULE}`, payload);
