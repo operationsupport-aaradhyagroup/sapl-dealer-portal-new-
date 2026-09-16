@@ -155,7 +155,7 @@ async function getRecordForDealer(api, recordId, contactId) {
         error.status = 404;
         throw error;
     }
-    if (String(record.cf_customer) !== String(contactId)) {
+    if (String(record.cf_customers) !== String(contactId)) {
         const error = new Error('Balance Confirmation does not belong to this customer');
         error.status = 403;
         throw error;
@@ -213,7 +213,7 @@ export default async function handler(req, res) {
         if (req.method === 'GET' && segments.length === 0) {
             const response = await api.get(`/${MODULE}`, { params: { per_page: 200 } });
             const summaries = (response.data.module_records || [])
-                .filter((record) => String(record.cf_customer) === String(contactId))
+                .filter((record) => String(record.cf_customers) === String(contactId))
                 .sort((first, second) => new Date(second.last_modified_time || 0) - new Date(first.last_modified_time || 0))
                 .slice(0, 1);
             // List responses do not include custom-table rows, so retrieve each matching
@@ -244,7 +244,7 @@ export default async function handler(req, res) {
             };
             const existingSummaries = (await api.get(`/${MODULE}`, { params: { per_page: 200 } }))
                 .data.module_records
-                ?.filter((record) => String(record.cf_customer) === String(contactId))
+                ?.filter((record) => String(record.cf_customers) === String(contactId))
                 .sort((first, second) => new Date(second.last_modified_time || 0) - new Date(first.last_modified_time || 0)) || [];
 
             if (existingSummaries.length > 0) {
@@ -254,15 +254,10 @@ export default async function handler(req, res) {
                 return json(res, 200, { record: toPortalRecord(updated), appended: true });
             }
 
-            // The custom-number field is numeric in this Zoho module, whereas
-            // dealer-facing customer codes may contain a prefix (for example,
-            // SAPL178). Keep the customer relation as the canonical link and
-            // store the numeric component in the numeric field.
-            const customerDigits = String(customerIdentifier).replace(/\D/g, '');
-            const numericCustomerNumber = customerDigits ? Number(customerDigits) : null;
+            const customerNumber = Number(customerIdentifier);
             const payload = {
-                ...(Number.isFinite(numericCustomerNumber) && { cf_custom_number: numericCustomerNumber }),
-                cf_customer: contactId,
+                cf_custom_number: Number.isFinite(customerNumber) ? customerNumber : customerIdentifier,
+                cf_customers: contactId,
                 [LEDGER_FIELD]: [ledgerRow],
             };
             const createdResponse = await api.post(`/${MODULE}`, payload);
@@ -359,14 +354,8 @@ export default async function handler(req, res) {
 
         return json(res, 404, { error: 'Not found' });
     } catch (error) {
-        // Application validation errors deliberately set `status`; Axios errors
-        // also expose a status, but their Zoho response contains the useful
-        // reason that the portal needs to show.
-        if (error.status && !error.response) return json(res, error.status, { error: error.message });
-
-        const zohoError = error.response?.data;
-        const message = zohoError?.message || error.message || 'Zoho Books request failed';
-        console.error('Balance Confirmation request failed:', zohoError || error.message);
-        return json(res, error.response?.status || 502, { error: message, details: zohoError?.details });
+        if (error.status) return json(res, error.status, { error: error.message });
+        console.error('Balance Confirmation request failed:', error.response?.data?.message || error.message);
+        return json(res, 502, { error: 'Zoho Books request failed' });
     }
 }
