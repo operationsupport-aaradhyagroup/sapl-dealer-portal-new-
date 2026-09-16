@@ -1,0 +1,118 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+:root {
+  font-family: Manrope, Aptos, "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  color: #1e293b;
+  background: #f8fafc;
+  font-synthesis: none;
+  --brand-teal: #294f5a;
+  --brand-orange: #fb8f42;
+  --brand-orange-dark: #e8782a;
+  --brand-orange-soft: #fff1e6;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: #f8fafc;
+  letter-spacing: 0;
+}
+
+/* Calm, readable business typography: headings stay clear without looking heavy. */
+.font-black {
+  font-weight: 600 !important;
+  letter-spacing: -0.015em;
+}
+
+.font-bold {
+  font-weight: 500 !important;
+}
+
+.font-semibold {
+  font-weight: 500 !important;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+/* Keep the desktop navigation compact and aligned even on narrower screens. */
+aside nav > button {
+  min-width: 0;
+  justify-content: flex-start;
+  gap: 0.65rem;
+  padding-inline: 0.85rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  text-align: left;
+  white-space: nowrap;
+}
+
+aside nav > button svg {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 639px) {
+  /* Zoho opens the portal inside an embedded mobile frame. Avoid trapping the
+     page in a fixed-height inner scroll container, which prevents touch scroll. */
+  .portal-shell {
+    display: block;
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+  }
+
+  .portal-content {
+    min-height: 100dvh;
+    overflow: visible;
+    padding-bottom: 2rem;
+  }
+  /* Give compact screens comfortable touch targets without horizontal scrolling. */
+  button,
+  input[type='date'],
+  input[type='file'] {
+    max-width: 100%;
+  }
+
+  input[type='file'] {
+    font-size: 0.75rem;
+  }
+}
+
+/* Sworn Agritech / Aaradhya Seeds brand colours. */
+.bg-orange-500 { background-color: var(--brand-orange) !important; }
+.hover\:bg-orange-600:hover { background-color: var(--brand-orange-dark) !important; }
+.bg-orange-50 { background-color: var(--brand-orange-soft) !important; }
+.bg-orange-100 { background-color: #ffe5d2 !important; }
+.text-orange-500,
+.text-orange-600,
+.text-orange-700 { color: var(--brand-orange-dark) !important; }
+.text-gray-900,
+.text-green-700 { color: var(--brand-teal) !important; }
+.bg-green-700 { background-color: var(--brand-teal) !important; }
+.hover\:bg-green-800:hover { background-color: #1e4049 !important; }
+.border-orange-500 { border-color: var(--brand-orange) !important; }
+.border-orange-200 { border-color: #f9c69f !important; }
+.focus\:border-orange-500:focus { border-color: var(--brand-orange) !important; }
+.focus\:ring-orange-500:focus { --tw-ring-color: var(--brand-orange) !important; }
+.border-l-orange-500 { border-left-color: var(--brand-orange) !important; }
+.shadow-orange-500\/20,
+.shadow-orange-500\/30 { --tw-shadow-color: rgb(251 143 66 / 0.25) !important; }
