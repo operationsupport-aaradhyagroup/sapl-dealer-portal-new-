@@ -1,11 +1,5 @@
 import { getAccessToken, zohoApi } from './utils/zohoAuth.js';
 
-const getThreeMonthsAgoDate = () => {
-    const date = new Date();
-    date.setMonth(date.getMonth() - 3);
-    return date;
-};
-
 async function resolveContactId(api, customerIdentifier) {
     const value = String(customerIdentifier || '').trim();
     if (!value) return null;
@@ -34,35 +28,16 @@ export default async function handler(req, res) {
 
         const token = await getAccessToken();
         const api = await zohoApi(token);
-        const pricebookId = '2858789000000607355';
         const customerId = await resolveContactId(api, customerIdentifier);
         if (!customerId) {
             return res.status(404).json({ error: 'No Zoho Books customer matches this customer number.' });
         }
 
-        // 1. Fetch Contact Details to check uploaded documents & owner/salesperson info
+        // Fetch the contact for the salesperson field on the order.
         const contactRes = await api.get(`/contacts/${customerId}`);
         const contact = contactRes.data.contact || {};
-        
-        const documents = contact.documents || [];
-        const threeMonthsAgo = getThreeMonthsAgoDate();
 
-        const hasRecentConfirmation = documents.some(doc => {
-            const datePart = doc.uploaded_on ? doc.uploaded_on.split(' ')[0] : '';
-            const [day, month, year] = datePart.split('-');
-            if (!day || !month || !year) return false;
-
-            const docDate = new Date(`${year}-${month}-${day}`);
-            return docDate >= threeMonthsAgo;
-        });
-
-        if (!hasRecentConfirmation) {
-            return res.status(403).json({ 
-                error: 'Order Blocked: Please upload your mandatory quarterly ledger confirmation document in the Ledger section first.' 
-            });
-        }
-
-        // 2. Create Sales Order Payload with Salesperson
+        // Create the sales order using the current catalog rates.
         const { cartItems } = req.body;
         if (!cartItems || !Array.isArray(cartItems) || cartItems.length === 0) {
             return res.status(400).json({ error: 'Cart items are missing or invalid.' });
@@ -77,7 +52,6 @@ export default async function handler(req, res) {
         const salesOrderData = {
             customer_id: customerId,
             line_items: line_items,
-            pricebook_id: pricebookId,
             salesperson_name: contact.owner_name || "Admin" // Zoho ke liye mandatory salesperson field
         };
 
